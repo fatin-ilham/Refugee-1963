@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>REFUGEE: 1963 - Skills</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: monospace; 
+            background: #000 url('title_screen.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #0f0; 
+            padding: 10px; 
+            margin: 0;
+            text-align: center;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+        h1 { text-align: center; }
+        .story { text-align: left; }
+        .choices { text-align: center; }
+        .btn { 
+            display: inline-block; 
+            width: auto;
+            min-width: 300px;
+            margin: 5px auto; 
+            background: #111; 
+            color: #0f0; 
+            border: 1px solid #0f0; 
+            padding: 12px; 
+            cursor: pointer; 
+            font-size: 1em;
+        }
+        .sidebar {
+            text-align: left;
+        }
+        h1 { color: #ff0; text-align: center; margin-bottom: 10px; }
+        .stat { margin: 5px 0; font-size: 0.9em; }
+        .btn:hover { background: #0f0; color: #000; }
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 999;
+        }
+        .tv-frame {
+            max-width: 900px;
+            margin: 30px auto;
+            background: #1a1a1a;
+            border: 20px solid #2a2a2a;
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 
+                0 0 50px rgba(0, 255, 0, 0.3),
+                inset 0 0 100px rgba(0, 0, 0, 0.8),
+                0 0 0 5px #1a1a1a,
+                0 0 0 10px #0d0d0d;
+            position: relative;
+        }
+        .tv-frame::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #444;
+            font-size: 14px;
+            letter-spacing: 2px;
+        }
+        .tv-screen {
+            background: rgba(0, 20, 0, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.9);
+            position: relative;
+            overflow: hidden;
+        }
+        .tv-screen::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.3) 100%);
+            pointer-events: none;
+            border-radius: 20px;
+        }
+        .tv-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .tv-knob {
+            width: 50px;
+            height: 50px;
+            background: #333;
+            border-radius: 50%;
+            border: 2px solid #555;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tv-knob:hover {
+            background: #444;
+            color: #0f0;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        .story { 
+            line-height: 1.8; 
+            margin: 20px auto; 
+            white-space: pre-wrap; 
+            font-size: 1.1em;
+            text-align: center;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+            color: #0f0;
+            max-width: 800px;
+        }
+        .typewriter {
+            overflow: hidden;
+            white-space: pre-wrap;
+            text-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+        }
+        h1 {
+            text-shadow: 0 0 10px rgba(255, 255, 0, 0.6);
+            letter-spacing: 3px;
+        }
+        .good { color: #0f0; }
+        .bad { color: #f00; }
+        .info { color: #0ff; }
+        .skill { display: inline-block; width: 140px; margin: 3px 0; font-size: 0.85em; }
+        .skill-bar { width: 60px; height: 8px; background: #333; display: inline-block; margin-left: 5px; }
+        .skill-fill { height: 100%; background: #0f0; }
+        .game-image { 
+            max-width: 100%; 
+            height: auto; 
+            display: block; 
+            margin: 15px auto; 
+            border: 2px solid #444;
+            border-radius: 5px;
+        }
+        .image-container {
+            background: #111;
+            padding: 10px;
+            margin: 15px auto;
+            text-align: center;
+            border: 1px solid #333;
+            max-width: 100%;
+        }
+        .game-image { 
+            max-width: 100%; 
+            height: auto; 
+            display: inline-block; 
+            margin: 15px auto; 
+            border: 2px solid #444;
+            border-radius: 5px;
+        }
+        .image-caption {
+            color: #666;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+        .main-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+        }
+        .story-area {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        @media (max-width: 800px) {
+            .main-layout { flex-direction: column; }
+        }
+        .sidebar {
+            background: #111;
+            padding: 15px;
+            border: 1px solid #333;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            max-height: 90vh;
+            overflow-y: auto;
+            text-align: left;
+            border-radius: 10px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="scanlines"></div>
+    <div class="tv-frame">
+        <div class="tv-screen">
+            <h1 id="gameTitle">🗺️ REFUGEE: 1963</h1>
+            <div class="main-layout">
+                <div class="story-area">
+                    <div id="imageContainer" class="image-container" style="display:none;">
+                        <img id="sceneImage" class="game-image" src="" alt="Scene">
+                        <div id="imageCaption" class="image-caption"></div>
+                    </div>
+                    <div id="story" class="story"></div>
+                    <div id="choices"></div>
+                </div>
+                <div class="sidebar">
+                    <div id="stats"></div>
+                </div>
+            </div>
+        </div>
+        <div class="tv-controls">
+            <div class="tv-knob" onclick="goBack()" title="Back">⬅️</div>
+            <div class="tv-knob" onclick="render(1)" title="Home">🏠</div>
+            <div class="tv-knob" onclick="location.reload()" title="Restart">🔄</div>
+        </div>
+    </div>
+
+    <script>
+var G = {
+    hp:7, maxHp:10, food:3, maxFood:5, day:1, clues:0, rupees:10,
+    origin:'', items:[], allied:'none', special:true, kills:0, helped:0,
+    trust:{lion:0,dravida:0,front:0,deccan:0,union:0,ports:0},
+    fame:{lion:'Neutral',dravida:'Neutral',front:'Neutral',deccan:'Neutral',union:'Neutral',ports:'Neutral'},
+    skills:{combat:0,survival:0,speech:0,stealth:0,medicine:0,trade:0},
+    xp:0, level:1, currentImage:'', typeWriterInterval: null,
+    pageHistory: [1]
+};
+
+// Go back to previous page
+function goBack() {
+    if(G.pageHistory.length > 1) {
+        G.pageHistory.pop(); // Remove current page
+        var prevPage = G.pageHistory[G.pageHistory.length - 1];
+        render(prevPage);
+    } else {
+        render(1); // Go to title if no history
+    }
+}
+
+// Typewriter effect for title on load
+window.addEventListener('load', function() {
+    var title = document.getElementById('gameTitle');
+    var titleText = title.innerText;
+    title.innerText = '';
+    var i = 0;
+    function typeTitle() {
+        if (i < titleText.length) {
+            title.innerText += titleText.charAt(i);
+            i++;
+            setTimeout(typeTitle, 50);
+        }
+    }
+    typeTitle();
+});
+
+var origins = {
+    farmer:{hp:8,food:4,rupees:5,clue:'brother',loc:'Punjab',skills:{survival:3,trade:1}},
+    teacher:{hp:6,food:3,rupees:15,clue:'sister',loc:'Dravida',skills:{speech:3,medicine:1}},
+    merchant:{hp:5,food:5,rupees:30,clue:'father',loc:'Deccan',skills:{trade:4,speech:1}},
+    soldier:{hp:10,food:2,rupees:8,clue:'mother',loc:'Bengal',skills:{combat:4,stealth:1}},
+    doctor:{hp:7,food:3,rupees:12,clue:'sister',loc:'Bengal',skills:{medicine:4,survival:1}},
+    priest:{hp:6,food:4,rupees:10,clue:'brother',loc:'Deccan',skills:{speech:3,medicine:2}}
+};
+
+var relations = {
+    lion:{allies:['union'],enemies:['deccan','front']},
+    dravida:{allies:['ports'],enemies:['front']},
+    front:{allies:[],enemies:['lion','dravida','deccan']},
+    deccan:{allies:['union'],enemies:['lion','front']},
+    union:{allies:['lion','deccan'],enemies:['front']},
+    ports:{allies:['dravida'],enemies:[]}
+};
+
+var images = {
+    'title': 'title_screen.png',
+    'village1': 'village_scene1.png',
+    'village2': 'village_scene2.png',
+    'checkpoint': 'fac_punjab.png',
+    'camp': 'fight_scene.png',
+    'crossroads': 'crossroads.png',
+    'punjab': 'fac_punjab.png',
+    'dravida': 'fac_dravida.png',
+    'deccan': 'fac_deccan.png',
+    'bengal': 'fight_scene.png',
+    'fight': 'fight_scene.png',
+    'reunion': 'family_reunion.png',
+    'gameover': 'game_over.png',
+    'ui1': 'UIelements1.png',
+    'ui2': 'Uielements2.png'
+};
+
+function modTrust(f,d) {
+    G.trust[f] += d;
+    G.fame[f] = getFame(G.trust[f]);
+    if(d > 0 && relations[f].allies) {
+        relations[f].allies.forEach(function(a) { G.trust[a] += Math.floor(d/2); G.fame[a] = getFame(G.trust[a]); });
+    }
+    if(d > 0 && relations[f].enemies) {
+        relations[f].enemies.forEach(function(e) { G.trust[e] -= d; G.fame[e] = getFame(G.trust[e]); });
+    }
+}
+
+function getFame(t) {
+    if(t >= 8) return 'Idolized';
+    if(t >= 5) return 'Liked';
+    if(t >= 2) return 'Accepted';
+    if(t >= 0) return 'Neutral';
+    if(t >= -2) return 'Unfriendly';
+    if(t >= -3) return 'Hated';
+    return 'Vilified';
+}
+
+function isHostile(f) { return G.trust[f] <= -3; }
+
+function addXP(amount) {
+    G.xp += amount;
+    if(G.xp >= G.level * 10) {
+        G.level++;
+        G.xp = 0;
+        return true;
+    }
+    return false;
+}
+
+function increaseSkill(skill, amount) {
+    G.skills[skill] += amount;
+    if(G.skills[skill] > 10) G.skills[skill] = 10;
+}
+
+function checkSkill(skill, difficulty) {
+    var roll = Math.random() * 100;
+    var skillBonus = G.skills[skill] * 5;
+    var target = difficulty;
+    var success = roll <= (target + skillBonus);
+    return {success: success, roll: Math.floor(roll), target: target + skillBonus};
+}
+
+function getSkillName(s) {
+    var names = {combat:'Combat', survival:'Survival', speech:'Speech', stealth:'Stealth', medicine:'Medicine', trade:'Trade'};
+    return names[s] || s;
+}
+
+function showImage(imgKey, caption) {
+    var container = document.getElementById('imageContainer');
+    var img = document.getElementById('sceneImage');
+    var cap = document.getElementById('imageCaption');
+    
+    if(images[imgKey]) {
+        img.onerror = function() {
+            container.style.display = 'none';
+        };
+        img.src = images[imgKey];
+        img.alt = imgKey;
+        cap.innerText = caption || '';
+        container.style.display = 'block';
+        G.currentImage = imgKey;
+    } else {
+        container.style.display = 'none';
+    }
+}
+
+function init() {
+    G = {
+        hp:7, maxHp:10, food:3, maxFood:5, day:1, clues:0, rupees:10,
+        origin:'', items:[], allied:'none', special:true, kills:0, helped:0,
+        trust:{lion:0,dravida:0,front:0,deccan:0,union:0,ports:0},
+        fame:{lion:'Neutral',dravida:'Neutral',front:'Neutral',deccan:'Neutral',union:'Neutral',ports:'Neutral'},
+        skills:{combat:0,survival:0,speech:0,stealth:0,medicine:0,trade:0},
+        xp:0, level:1, currentImage:'', typeWriterInterval: null,
+        pageHistory: [1]
+    };
+}
+
+function render(p) {
+    // Track page history for back button
+    if(G.pageHistory[G.pageHistory.length - 1] !== p) {
+        G.pageHistory.push(p);
+    }
+    
+    // Scroll to top on page change
+    window.scrollTo(0, 0);
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    
+    // Hide sidebar on title/lore/howto screens (page 1, 98, 99)
+    var sidebar = document.querySelector('.sidebar');
+    if(p === 1 || p === 98 || p === 99) {
+        sidebar.style.display = 'none';
+    } else {
+        sidebar.style.display = 'block';
+    }
+    
+    var s = document.getElementById('stats');
+    var t = document.getElementById('story');
+    var c = document.getElementById('choices');
+    
+    // Hide choices during typewriter effect
+    c.style.display = 'none';
+    
+    var pg = pages[p];
+    if(!pg) return;
+    
+    // Set image for this scene
+    if(pg.image) {
+        showImage(pg.image, pg.imageCaption || '');
+    }
+    
+    if(pg.effect) pg.effect();
+    
+    // Typewriter effect for story text
+    var text = typeof pg.text === 'function' ? pg.text() : pg.text;
+    t.innerHTML = '';
+    
+    var i = 0;
+    var speed = 15; // ms per character (fast 60s tech feel)
+    
+    function typeWriter() {
+        if (i < text.length) {
+            t.innerHTML += text.charAt(i);
+            i++;
+            G.typeWriterInterval = setTimeout(typeWriter, speed);
+        } else {
+            finishTyping();
+        }
+    }
+    
+    function finishTyping() {
+        c.style.display = ''; // Show choices when done
+        if(G.typeWriterInterval) clearTimeout(G.typeWriterInterval);
+    }
+    
+    typeWriter();
+    
+    var skillHtml = '';
+    for(var sk in G.skills) {
+        var pct = G.skills[sk] * 10;
+        skillHtml += '<div class="skill">' + getSkillName(sk) + ':' + G.skills[sk] + 
+            '<div class="skill-bar"><div class="skill-fill" style="width:' + pct + '%"></div></div></div> ';
+    }
+    
+    s.innerHTML = '<div class="stat">❤️ HP: ' + G.hp + '/' + G.maxHp + '</div>' +
+        '<div class="stat">🍞 Food: ' + G.food + '/' + G.maxFood + '</div>' +
+        '<div class="stat">⏳ Day: ' + G.day + '/60</div>' +
+        '<div class="stat">🔍 Clues: ' + G.clues + '/3</div>' +
+        '<div class="stat">💰 Rs: ' + G.rupees + '</div>' +
+        '<div class="stat">⭐ Level: ' + G.level + ' (XP:' + G.xp + '/' + (G.level*10) + ')</div>' +
+        '<div class="stat">🎯 Origin: ' + (G.origin||'?') + '</div>' +
+        '<div class="stat">🎒 Items: ' + (G.items.join(',')||'none') + '</div>' +
+        '<br><hr style="border-color:#333">' +
+        '<br><b>📊 SKILLS:</b><br>' + skillHtml +
+        '<br><hr style="border-color:#333">' +
+        '<br><b>🏛️ REPUTATION:</b><br>' +
+        '<div class="stat">🦁 Lion: ' + G.trust.lion + ' (' + G.fame.lion + ')</div>' +
+        '<div class="stat">🏛️ Dravida: ' + G.trust.dravida + ' (' + G.fame.dravida + ')</div>' +
+        '<div class="stat">✊ Front: ' + G.trust.front + ' (' + G.fame.front + ')</div>' +
+        '<div class="stat">🌙 Deccan: ' + G.trust.deccan + ' (' + G.fame.deccan + ')</div>' +
+        '<div class="stat">🕉️ Union: ' + G.trust.union + ' (' + G.fame.union + ')</div>' +
+        '<div class="stat">⚓ Ports: ' + G.trust.ports + ' (' + G.fame.ports + ')</div>';
+    
+    if(G.hp <= 0 && p !== 999) { render(999); return; }
+    
+    c.innerHTML = '';
+    var ch = typeof pg.choices === 'function' ? pg.choices() : pg.choices;
+    ch.forEach(function(x) {
+        if(x.cond && !x.cond()) return;
+        var b = document.createElement('div');
+        b.className = 'btn';
+        b.innerText = '> ' + x.text;
+        if(x.skillCheck) {
+            b.innerText += ' [' + getSkillName(x.skillCheck.skill) + ' check]';
+        }
+        b.onclick = function() {
+            if(x.skillCheck) {
+                var result = checkSkill(x.skillCheck.skill, x.skillCheck.difficulty);
+                if(result.success) {
+                    t.innerText += '\n\n✅ SKILL CHECK: ' + getSkillName(x.skillCheck.skill).toUpperCase() + 
+                        ' - SUCCESS! (Rolled ' + result.roll + ' vs ' + result.target + ')';
+                    if(x.effect) x.effect();
+                    if(x.onSuccess) x.onSuccess();
+                    addXP(3);
+                    increaseSkill(x.skillCheck.skill, 1);
+                } else {
+                    t.innerText += '\n\n❌ SKILL CHECK: ' + getSkillName(x.skillCheck.skill).toUpperCase() + 
+                        ' - FAILED (Rolled ' + result.roll + ' vs ' + result.target + ')';
+                    if(x.onFail) x.onFail();
+                }
+            } else {
+                if(x.effect) x.effect();
+            }
+            if(x.origin) {
+                G.origin = x.origin;
+                var o = origins[x.origin];
+                G.hp = o.hp; G.food = o.food; G.rupees = o.rupees;
+                for(var sk in o.skills) {
+                    increaseSkill(sk, o.skills[sk]);
+                }
+            }
+            render(x.next);
+        };
+        c.appendChild(b);
+    });
+}
+
+var pages = {
+    1: {
+        image: 'title',
+        imageCaption: 'When India Broke',
+        text: '=== REFUGEE: 1963 ===\n\n"WHEN INDIA BROKE"\n\n1947: Mountbatten crashed. No independence.\n1959: Britain left after 12 year fight.\n1963: Seven factions. India broken.\n\nFind your family in 60 days.\n\n=== SKILL SYSTEM ===\n6 Skills: Combat, Survival, Speech, Stealth, Medicine, Trade\n\nGain XP by:\n- Successful skill checks\n- Helping people\n- Killing enemies\n\nHigher skill = better success chance!',
+        choices: [
+            {text:'🎮 START GAME', next:2},
+            {text:'📖 LORE', next:99},
+            {text:'❓ HOW TO PLAY', next:98}
+        ]
+    },
+    99: {
+        image: 'title',
+        text: '=== WORLD LORE ===\n\n【1947 - DIVERGENCE】\nMountbatten plane crash. No independence.\n\n【1948-59 - RESISTANCE】\nUnited resistance. All religions together.\n\n【1959 - BRITISH EXIT】\nBritain surrendered. Last soldier left.\n\n【1960-63 - FRACTURE】\nSeven factions formed:\n\n🦁 Lion Guardians (Punjab)\n  Allies: Union | Enemies: Deccan, Front\n\n🏛️ Dravida Alliance (South)\n  Allies: Ports | Enemies: Front\n\n✊ People\'s Front (Bengal)\n  Allies: None | Enemies: Everyone\n\n🌙 Deccan Coalition (Hyderabad)\n  Allies: Union | Enemies: Lion, Front\n\n🕉️ Union Remnant (Delhi)\n  Allies: Lion, Deccan | Enemies: Front\n\n⚓ Free Ports (Coastal)\n  Allies: Dravida | No enemies\n\nHelp one faction = their enemies hate you!',
+        choices: [
+            {text:'🎮 START', next:2}
+        ]
+    },
+    98: {
+        image: 'ui1',
+        imageCaption: 'Game Interface Preview',
+        text: '=== HOW TO PLAY ===\n\n🎯 GOAL:\nFind your family before 60 days run out.\nCollect 3 clues to locate them.\n\n📊 STATS:\n❤️ HP: Reach 0 = GAME OVER\n🍞 Food: Decreases daily. At 0, lose HP\n⏳ Day: You have 60 days total\n🔍 Clues: Need 3 to find family\n💰 Rupees: Money for trades\n⭐ Level: Gain XP to improve skills\n\n⚔️ SKILL SYSTEM:\n6 Skills: Combat, Survival, Speech, Stealth, Medicine, Trade\n\nEach skill point = +5% success chance\n\nHow to increase skills:\n- Successful skill checks (+1 skill, +3 XP)\n- Level up (gain XP → skill points)\n- Using skills repeatedly\n\n✅ SKILL CHECKS:\nWhen you see [Skill check] on a button:\n- Click it to attempt\n- Higher skill = better chance\n- Success: Gain rewards + XP\n- Failure: May lose HP, resources, or opportunities\n\nExample: Speech 3 vs Medium (50) = 65% success\n\n🏛️ REPUTATION SYSTEM:\n6 Factions with trust (-10 to +10)\n\nFame Levels:\nVilified → Hated → Unfriendly → Neutral → Accepted → Liked → Idolized\n\n⚠️ FACTION RELATIONS:\n- Help faction X → Allies happy, Enemies hate you\n- Vilified/Hated (-3 or less) = Attack on sight!\n- Cannot be friends with everyone\n- Choose allies wisely!\n\n💡 TIPS:\n1. Rest when HP is low (camp, temples)\n2. Keep food above 2 to avoid starvation\n3. Build trust with 1-2 factions max\n4. Use skills often to level up\n5. Explore all routes for best ending\n6. Some paths are dangerous if hated\n\n🎮 CONTROLS:\n- Click buttons to make choices\n- Scroll down to read full story\n- Stats panel stays visible (right side)\n- Images show current location\n\n🏆 ENDINGS:\n6+ different endings based on:\n- Clues found (0-3)\n- Days remaining\n- Faction alliances\n- Choices made',
+        choices: [
+            {text:'🎮 START GAME', next:2}
+        ]
+    },
+    2: {
+        image: 'ui1',
+        imageCaption: 'Choose your origin',
+        text: 'CHOOSE YOUR ORIGIN:\n\n🌾 Farmer: HP 8, Food 4, Rs.5\n   Skills: Survival +3, Trade +1\n   Family: Brother in Punjab\n\n📚 Teacher: HP 6, Food 3, Rs.15\n   Skills: Speech +3, Medicine +1\n   Family: Sister in Dravida\n\n💰 Merchant: HP 5, Food 5, Rs.30\n   Skills: Trade +4, Speech +1\n   Family: Father in Deccan\n\n⚔️ Soldier: HP 10, Food 2, Rs.8\n   Skills: Combat +4, Stealth +1\n   Family: Mother in Bengal\n\n🏥 Doctor: HP 7, Food 3, Rs.12\n   Skills: Medicine +4, Survival +1\n   Family: Sister in Bengal\n\n🕉️ Priest: HP 6, Food 4, Rs.10\n   Skills: Speech +3, Medicine +2\n   Family: Brother in Deccan',
+        choices: [
+            {text:'🌾 Farmer', next:3, origin:'farmer'},
+            {text:'📚 Teacher', next:3, origin:'teacher'},
+            {text:'💰 Merchant', next:3, origin:'merchant'},
+            {text:'⚔️ Soldier', next:3, origin:'soldier'},
+            {text:'🏥 Doctor', next:3, origin:'doctor'},
+            {text:'🕉️ Priest', next:3, origin:'priest'}
+        ]
+    },
+    3: {
+        image: 'village1',
+        imageCaption: 'Your village - abandoned',
+        text: function() {
+            var o = origins[G.origin];
+            var sk = '';
+            for(var s in o.skills) sk += s + ':' + o.skills[s] + '  ';
+            return 'You are a ' + G.origin.toUpperCase() + '.\n\n' +
+                'Starting Skills: ' + sk + '\n\n' +
+                'Your ' + o.clue + ' waits in ' + o.loc + '.\n\n' +
+                'Last message: "I wait here. Come find me."\n\n' +
+                'The year is 1963. Your village was torn apart.\n' +
+                'You have 60 days before trails go cold.\n\n' +
+                'Use skills to succeed. Higher = better chance!';
+        },
+        choices: [
+            {text:'🚶 Go to Checkpoint', next:10},
+            {text:'🏠 Search Village First', next:4}
+        ]
+    },
+    4: {
+        image: 'village2',
+        imageCaption: 'Empty streets',
+        text: 'VILLAGE SEARCH\n\nYou walk through empty streets. Homes abandoned.\nSome houses burned. Others looted.\n\nYour own home stands - door hanging off hinges.\n\nNeighbor\'s house looks ransacked too.',
+        choices: [
+            {text:'🔍 Search your home [Survival check]', next:5, 
+                skillCheck:{skill:'survival', difficulty:50},
+                onSuccess:function(){G.rupees+=20;increaseSkill('survival',1);},
+                onFail:function(){G.hp-=1;}
+            },
+            {text:'🚪 Leave for Checkpoint', next:10}
+        ]
+    },
+    5: {
+        image: 'village1',
+        text: function() {
+            return 'SEARCH RESULT\n\n' +
+                (G.rupees >= 20 ? 
+                '✅ Found Rs.20 hidden under floorboard!\n   Survival skill increased +1' : 
+                '❌ Nothing but memories.\n   HP -1 from despair');
+        },
+        choices: [{text:'🚪 Leave', next:10}]
+    },
+    10: {
+        image: 'checkpoint',
+        imageCaption: 'Lion Guardians Checkpoint',
+        text: function() {
+            return 'ROAD CHECKPOINT - Day ' + G.day + '\n\n' +
+                '🦁 Lion Guardians block the road.\n' +
+                'Armed men in turbans. Golden lion flag.\n\n' +
+                '"Papers," the guard says.\n\n' +
+                'LION TRUST: ' + G.trust.lion + ' (' + G.fame.lion + ')\n' +
+                (isHostile('lion') ? '⚠️ They hate you! Danger!' : '✓ You can pass') + '\n\n' +
+                'Your Skills: Speech:' + G.skills.speech + ' | Stealth:' + G.skills.stealth;
+        },
+        choices: [
+            {text:'🙏 Show respect [Speech check]', next:11, 
+                skillCheck:{skill:'speech', difficulty:60},
+                onSuccess:function(){modTrust('lion',4);addXP(2);},
+                onFail:function(){modTrust('lion',1);}
+            },
+            {text:'💼 Offer work (-Rs.5)', next:11, effect:function(){if(G.rupees>=5)G.rupees-=5;modTrust('lion',2);}},
+            {text:'🥷 Sneak past [Stealth check]', next:12,
+                skillCheck:{skill:'stealth', difficulty:50},
+                onSuccess:function(){addXP(3);},
+                onFail:function(){G.hp-=2;}
+            },
+            {text:'🕉️ Claim Union loyalty', next:13, effect:function(){modTrust('lion',-2);modTrust('union',1);}}
+        ]
+    },
+    11: {
+        image: 'punjab',
+        imageCaption: 'Punjab - Land of Five Rivers',
+        text: function() {
+            return '✅ PASSED\n\nGuard studies you. Nods.\n"Move along. Stay on the road."\n\n' +
+                'REPUTATION CHANGES:\n' +
+                '🦁 Lion: ' + G.fame.lion + '\n' +
+                '🕉️ Union: ' + G.fame.union + ' (ally gained +trust)\n' +
+                '🌙 Deccan: ' + G.fame.deccan + ' (enemy lost -trust)\n' +
+                '✊ Front: ' + G.fame.front + ' (enemy lost -trust)';
+        },
+        choices: [{text:'⛺ To Refugee Camp', next:20}]
+    },
+    12: {
+        image: 'fight',
+        imageCaption: 'Escape attempt',
+        text: function() {
+            return (G.hp <= 5 ? 
+                '✅ SNEAK SUCCESS!\n   You slip through tall grass.\n   XP +3, Stealth improved' : 
+                '❌ CAUGHT!\n   "Thief!" They beat you.\n   HP -2');
+        },
+        choices: [{text:'⛺ To Camp', next:20}]
+    },
+    13: {
+        image: 'fight',
+        text: function() { 
+            G.hp-=3; G.rupees=Math.max(0,G.rupees-10);
+            return '❌ WRONG CHOICE\n\n"Union? Spy!"\n\nThey beat you. Take your money.\n\nHP -3, Rs. -10';
+        },
+        choices: [{text:'🐛 Crawl to Camp', next:20}]
+    },
+    20: {
+        image: 'camp',
+        imageCaption: 'Refugee Camp - thousands displaced',
+        text: function() {
+            return 'REFUGEE CAMP - Day ' + G.day + '\n\n' +
+                'Tents stretch for acres. Cooking smoke.\nChildren with hollow eyes stare.\n\n' +
+                'A woman approaches: "First time? You look lost."\n\n' +
+                'HP:' + G.hp + ' | Food:' + G.food + ' | Rs:' + G.rupees + '\n\n' +
+                'FACTION STANDING:\n' +
+                '🦁 Lion:' + G.fame.lion + '  🏛️ Dravida:' + G.fame.dravida + '\n' +
+                '✊ Front:' + G.fame.front + '  🌙 Deccan:' + G.fame.deccan + '\n' +
+                '🕉️ Union:' + G.fame.union + '  ⚓ Ports:' + G.fame.ports;
+        },
+        choices: [
+            {text:'😴 Rest (+3HP, +1day)', next:20, effect:function(){G.hp=Math.min(10,G.hp+3);G.day++;}},
+            {text:'❓ Ask about family (-Rs.5) [Speech]', next:21, 
+                skillCheck:{skill:'speech', difficulty:40},
+                onSuccess:function(){if(G.rupees>=5)G.rupees-=5;if(Math.random()>0.3)G.clues++;addXP(2);},
+                onFail:function(){if(G.rupees>=5)G.rupees-=5;}
+            },
+            {text:'💊 Buy Medkit (-Rs.15)', next:20, effect:function(){if(G.rupees>=15){G.rupees-=15;G.items.push('medkit');}}},
+            {text:'💰 Trade [Trade check]', next:22,
+                skillCheck:{skill:'trade', difficulty:50},
+                onSuccess:function(){G.rupees+=10;addXP(2);},
+                onFail:function(){}
+            },
+            {text:'🚶 Leave Camp', next:50}
+        ]
+    },
+    21: {
+        text: function() {
+            return G.clues > 0 ? 
+                '✅ CLUE FOUND!\n   "Heard that name... toward ' + origins[G.origin].loc + '"\n   CLUES: ' + G.clues + '/3' : 
+                '❌ No information. Try elsewhere.';
+        },
+        choices: [{text:'⬅️ Back', next:20}]
+    },
+    22: {
+        text: function() {
+            return G.rupees >= 10 ? 
+                '✅ TRADE SUCCESS!\n   You haggle well. +Rs.10\n   Trade skill improved' : 
+                '❌ Trade failed. No profit.';
+        },
+        choices: [{text:'⬅️ Back', next:20}]
+    },
+    50: {
+        image: 'crossroads',
+        imageCaption: 'Four paths across fractured India',
+        text: function() {
+            return 'CROSSROADS - Day ' + G.day + '\n\n' +
+                'The road splits four ways.\n' +
+                'Family trace points to: ' + origins[G.origin].loc.toUpperCase() + '\n\n' +
+                'FACTION TRUST:\n' +
+                '🦁 Lion:' + G.trust.lion + '(' + G.fame.lion + ')\n' +
+                '🏛️ Dravida:' + G.trust.dravida + '(' + G.fame.dravida + ')\n' +
+                '✊ Front:' + G.trust.front + '(' + G.fame.front + ')\n' +
+                '🌙 Deccan:' + G.trust.deccan + '(' + G.fame.deccan + ')\n\n' +
+                '⏳ Days remaining: ' + (60-G.day) + '\n\n' +
+                '⚠️ WARNING: Entering enemy territory is dangerous!\n' +
+                '   Vilified/Hated factions attack on sight.';
+        },
+        choices: [
+            {text:'🦁 NORTH - Punjab (Lion)', next:100},
+            {text:'🏛️ SOUTH - Dravida', next:200},
+            {text:'✊ EAST - Bengal (Front)', next:300},
+            {text:'🌙 WEST - Deccan', next:400}
+        ]
+    },
+    100: {
+        image: 'punjab',
+        imageCaption: 'Punjab Border',
+        text: function() {
+            if(isHostile('lion')) {
+                return '🦁 PUNJAB BORDER - Day ' + G.day + '\n\n' +
+                    'Lion Guardians spot you.\n' +
+                    '"ENEMY!" they shout.\n\n' +
+                    'Your fame: ' + G.fame.lion + '\n' +
+                    '⚠️ They attack on sight!\n\n' +
+                    'COMBAT IMMINENT!';
+            }
+            return '🦁 PUNJAB BORDER - Day ' + G.day + '\n\n' +
+                'Golden fields. Temple spires.\n' +
+                'Lion Guardians flag: golden lion with sword.\n\n' +
+                'A patrol approaches: "State business."\n\n' +
+                'Your fame: ' + G.fame.lion + '\n' +
+                'Trust: ' + G.trust.lion;
+        },
+        choices: function() {
+            if(isHostile('lion')) return [
+                {text:'⚔️ FIGHT [Combat check]', next:101, skillCheck:{skill:'combat',difficulty:60}, onSuccess:function(){G.kills++;G.hp-=1;addXP(3);}, onFail:function(){G.hp-=4;}},
+                {text:'🏃 RUN [Stealth check]', next:50, skillCheck:{skill:'stealth',difficulty:50}, onSuccess:function(){addXP(2);}, onFail:function(){G.hp-=3;}}
+            ];
+            return [
+                {text:'🌾 Seek work [Survival]', next:101, skillCheck:{skill:'survival',difficulty:40}, onSuccess:function(){modTrust('lion',2);G.food+=2;addXP(2);}, onFail:function(){modTrust('lion',1);}},
+                {text:'❓ Ask family [Speech]', next:102, skillCheck:{skill:'speech',difficulty:50}, onSuccess:function(){modTrust('lion',1);if(Math.random()>0.4)G.clues++;addXP(2);}, onFail:function(){modTrust('lion',1);}},
+                {text:'🚶 Pass through', next:103}
+            ];
+        }
+    },
+    101: {
+        text: function() {
+            if(isHostile('lion')) {
+                return G.hp > 3 ? 
+                    '✅ ESCAPED!\n   HP -1, Kills: ' + G.kills : 
+                    '⚠️ Barely escaped...';
+            }
+            G.day++; G.food = Math.min(5,G.food+2);
+            return '🌾 WORK CAMP\n\n' +
+                'Harvesting wheat. Hard labor.\n' +
+                '+2 Food, +1 day';
+        },
+        choices: [{text:'🏙️ To Amritsar', next:150}, {text:'🏠 Stay (END)', next:900}]
+    },
+    102: {
+        text: '❓ HINT\n\n"Maybe heard that name.\nToward Amritsar..."',
+        choices: [{text:'🏙️ Continue', next:150}]
+    },
+    103: {
+        text: '✅ PASSAGE\n\nThey wave you through.\nNo trouble. No help either.',
+        choices: [{text:'🏙️ To Amritsar', next:150}]
+    },
+    150: {
+        image: 'fight',
+        imageCaption: 'Amritsar - bandits near gates',
+        text: 'AMRITSAR OUTSKIRTS - Day ' + G.day + '\n\n' +
+            'Golden Temple visible in distance.\n' +
+            'Bandits eye passing refugees near gates.\n\n' +
+            'Choose your approach:',
+        choices: [
+            {text:'🚪 Enter city (safe)', next:160},
+            {text:'⚔️ Fight bandits [Combat]', next:151, skillCheck:{skill:'combat',difficulty:50}, onSuccess:function(){G.rupees+=10;G.kills++;addXP(3);}, onFail:function(){G.hp-=4;G.rupees=Math.max(0,G.rupees-15);}},
+            {text:'🥷 Sneak [Stealth]', next:152, skillCheck:{skill:'stealth',difficulty:50}, onSuccess:function(){addXP(2);}, onFail:function(){G.food-=2;}}
+        ]
+    },
+    151: {
+        text: function() {
+            return G.rupees >= 10 ? 
+                '✅ VICTORY!\n   Bandits defeated.\n   Looted: Rs.10, Kills: ' + G.kills : 
+                '❌ DEFEAT!\n   They outnumber you.\n   HP -4, Rs. -15';
+        },
+        choices: [{text:'🕌 Enter City', next:160}]
+    },
+    152: {
+        text: function() { 
+            return G.food >= 0 ? 
+                '✅ SNEAK SUCCESS\n   Slip past unnoticed.\n   XP +2' : 
+                '❌ SPOTTED!\n   Drop supplies escaping.\n   Food -2'; 
+        },
+        choices: [{text:'🕌 Enter', next:160}]
+    },
+    160: {
+        image: 'punjab',
+        imageCaption: 'Amritsar City - Golden Temple',
+        text: 'AMRITSAR CITY - Day ' + G.day + '\n\n' +
+            'Crowded streets. Langar kitchens feed thousands.\n' +
+            'Pilgrims everywhere. Golden Temple glows.\n\n' +
+            'This is a major hub.',
+        choices: [
+            {text:'❓ Seek family [Medicine check]', next:161, skillCheck:{skill:'medicine',difficulty:40}, onSuccess:function(){if(G.clues>=1)G.clues=3;addXP(3);}, onFail:function(){}},
+            {text:'🚶 Continue Journey', next:500}
+        ]
+    },
+    161: {
+        text: function() {
+            return G.clues >= 3 ? 
+                '✅ FAMILY FOUND!\n   Your brother works at langar!\n   He\'s alive! CLUES: 3/3' : 
+                '❌ NO TRACE\n   No one heard that name.\n   Try elsewhere.';
+        },
+        choices: [{text:'🚶 Continue', next:500}]
+    },
+    200: {
+        image: 'dravida',
+        imageCaption: 'Dravida Border - South India',
+        text: function() {
+            if(isHostile('dravida')) {
+                return '🏛️ DRAVIDA BORDER\n\n' +
+                    'Guards spot you.\n' +
+                    '"ENEMY!" they shout.\n\n' +
+                    'Fame: ' + G.fame.dravida + '\n' +
+                    '⚠️ Attack imminent!';
+            }
+            return '🏛️ DRAVIDA BORDER - Day ' + G.day + '\n\n' +
+                'Palm trees. Tamil script on signs.\n' +
+                'Dravida Alliance guards check you.\n\n' +
+                '"Language?" they ask.\n\n' +
+                'Fame: ' + G.fame.dravida;
+        },
+        choices: function() {
+            if(isHostile('dravida')) return [
+                {text:'⚔️ FIGHT [Combat]', next:201, skillCheck:{skill:'combat',difficulty:60}, onSuccess:function(){G.kills++;G.hp-=2;addXP(3);}, onFail:function(){G.hp=0;}},
+                {text:'🏃 RUN', next:250}
+            ];
+            return [
+                {text:'🙏 Respect culture [Speech]', next:202, skillCheck:{skill:'speech',difficulty:50}, onSuccess:function(){modTrust('dravida',3);addXP(2);}, onFail:function(){modTrust('dravida',1);}},
+                {text:'💼 Offer skills', next:203, effect:function(){modTrust('dravida',1);G.food++;}},
+                {text:'🚶 Pass through', next:250}
+            ];
+        }
+    },
+    201: {
+        text: function() { 
+            return G.hp > 0 ? 
+                '✅ ESCAPED!\n   HP -2, Kills: ' + G.kills : 
+                '❌ KILLED IN COMBAT'; 
+        },
+        choices: [{text:'🌊 To Chennai', next:250}]
+    },
+    202: {
+        text: '✅ RESPECT PAID\n\n' +
+            'Guard smiles: "You honor our land. Pass."\n\n' +
+            '+1 Food',
+        effect: function() { G.food = Math.min(5,G.food+1); },
+        choices: [{text:'🌊 To Chennai', next:250}]
+    },
+    203: {
+        text: '✅ SKILLS RECOGNIZED\n\n' +
+            '"We need teachers," guard says.\n' +
+            '"Chennai will value you."\n\n' +
+            '+1 Food',
+        effect: function() { G.food = Math.min(5,G.food+1); },
+        choices: [{text:'🌊 To Chennai', next:250}]
+    },
+    250: {
+        image: 'dravida',
+        imageCaption: 'Chennai Port City',
+        text: 'CHENNAI STREETS - Day ' + G.day + '\n\n' +
+            'Busy port city. Ships from Ceylon.\n' +
+            'Different feel from the north.\n\n' +
+            'Naval headquarters. Trade hub.',
+        choices: [
+            {text:'❓ Seek family [Speech]', next:251, skillCheck:{skill:'speech',difficulty:50}, onSuccess:function(){if(G.origin==='teacher')G.clues=3;addXP(2);}, onFail:function(){}},
+            {text:'🚶 Continue Journey', next:500}
+        ]
+    },
+    251: {
+        text: function() { 
+            return G.clues >= 3 ? 
+                '✅ FAMILY FOUND!\n   Sister teaches at school!\n   CLUES: 3/3' : 
+                '❌ NO TRACE\n   No one knows that name.'; 
+        },
+        choices: [{text:'🚶 Continue', next:500}]
+    },
+    300: {
+        image: 'bengal',
+        imageCaption: 'Bengal Border - Red Flags',
+        text: function() {
+            if(isHostile('front')) {
+                return '✊ BENGAL BORDER\n\n' +
+                    '"ENEMY OF REVOLUTION!"\n\n' +
+                    'Fame: ' + G.fame.front + '\n' +
+                    '⚠️ They attack!';
+            }
+            return '✊ BENGAL BORDER - Day ' + G.day + '\n\n' +
+                'River crossings. Red flags with fists.\n' +
+                'People\'s Front checkpoint.\n\n' +
+                '"Comrade. Papers. Ideology."\n\n' +
+                'Fame: ' + G.fame.front;
+        },
+        choices: function() {
+            if(isHostile('front')) return [
+                {text:'⚔️ FIGHT [Combat]', next:301, skillCheck:{skill:'combat',difficulty:60}, onSuccess:function(){G.kills++;G.hp-=2;addXP(3);}, onFail:function(){G.hp=0;}},
+                {text:'🏃 RUN', next:350}
+            ];
+            return [
+                {text:'✊ Worker solidarity [Speech]', next:301, skillCheck:{skill:'speech',difficulty:40}, onSuccess:function(){modTrust('front',4);addXP(2);}, onFail:function(){modTrust('front',2);}},
+                {text:'😐 Neutral', next:302, effect:function(){modTrust('front',-1);}},
+                {text:'🏥 Offer help [Medicine]', next:303, skillCheck:{skill:'medicine',difficulty:50}, onSuccess:function(){modTrust('front',3);G.hp++;addXP(2);}, onFail:function(){modTrust('front',1);}}
+            ];
+        }
+    },
+    301: {
+        text: function() {
+            if(isHostile('front')) {
+                return G.hp > 0 ? '✅ ESCAPED! HP -2' : '❌ KILLED';
+            }
+            G.food = Math.min(5,G.food+2);
+            return '✅ COMRADE WELCOME\n\n' +
+                '"Brother! Eat. Rest."\n\n' +
+                '+2 Food';
+        },
+        choices: [{text:'🏭 To Kolkata', next:350}]
+    },
+    302: {
+        text: '❌ NEUTRAL SUSPECT\n\n' +
+            '"Neutral helps enemy."\n\n' +
+            'Detained one night. Released hungry.\n\n' +
+            'Food -2, HP -1, +1 day',
+        effect: function() { G.food -= 2; G.hp--; G.day++; },
+        choices: [{text:'🏭 To Kolkata', next:350}]
+    },
+    303: {
+        text: '✅ SKILLS VALUED\n\n' +
+            '"Tend the wounded," she says.\n\n' +
+            '+1 Food',
+        effect: function() { G.food = Math.min(5,G.food+1); },
+        choices: [{text:'🏭 To Kolkata', next:350}]
+    },
+    350: {
+        image: 'bengal',
+        imageCaption: 'Kolkata Communes',
+        text: 'KOLKATA SLUMS - Day ' + G.day + '\n\n' +
+            'Communes everywhere. Ration lines.\n' +
+            'Propaganda posters on walls.\n\n' +
+            'Intellectual capital. Poverty everywhere.',
+        choices: [
+            {text:'❓ Seek family [Speech]', next:351, skillCheck:{skill:'speech',difficulty:50}, onSuccess:function(){if(G.clues>=2)G.clues=3;addXP(2);}, onFail:function(){}},
+            {text:'🚶 Continue Journey', next:500}
+        ]
+    },
+    351: {
+        text: function() { 
+            return G.clues >= 3 ? 
+                '✅ FAMILY FOUND!\n   Mother in textile commune!\n   CLUES: 3/3' : 
+                '❌ NO TRACE\n   Many refugees. No record.'; 
+        },
+        choices: [{text:'🚶 Continue', next:500}]
+    },
+    400: {
+        image: 'deccan',
+        imageCaption: 'Deccan Border - Stone Forts',
+        text: function() {
+            if(isHostile('deccan')) {
+                return '🌙 DECCAN BORDER\n\n' +
+                    '"ENEMY OF NIZAM!"\n\n' +
+                    'Fame: ' + G.fame.deccan + '\n' +
+                    '⚠️ Attack!';
+            }
+            return '🌙 DECCAN BORDER - Day ' + G.day + '\n\n' +
+                'Desert to stone forts.\n' +
+                'Crescent flags. Deccan Coalition.\n\n' +
+                '"Bow to Nizam," guard says.\n\n' +
+                'Fame: ' + G.fame.deccan;
+        },
+        choices: function() {
+            if(isHostile('deccan')) return [
+                {text:'⚔️ FIGHT [Combat]', next:401, skillCheck:{skill:'combat',difficulty:60}, onSuccess:function(){G.kills++;G.hp-=2;addXP(3);}, onFail:function(){G.hp=0;}},
+                {text:'🏃 RUN', next:450}
+            ];
+            return [
+                {text:'🙏 Bow [Speech]', next:401, skillCheck:{skill:'speech',difficulty:40}, onSuccess:function(){modTrust('deccan',4);addXP(2);}, onFail:function(){modTrust('deccan',2);}},
+                {text:'❌ Refuse', next:402, effect:function(){modTrust('deccan',-3);G.hp--;}},
+                {text:'💰 Bribe [Trade]', next:403, skillCheck:{skill:'trade',difficulty:50}, onSuccess:function(){if(G.rupees>=5)G.rupees-=3;addXP(2);}, onFail:function(){if(G.rupees>=5)G.rupees-=5;}}
+            ];
+        }
+    },
+    401: {
+        text: function() {
+            if(isHostile('deccan')) {
+                return G.hp > 0 ? '✅ ESCAPED! HP -2' : '❌ KILLED';
+            }
+            G.food = Math.min(5,G.food+1);
+            return '✅ RESPECT REWARDED\n\n' +
+                '"Good. Pass."\n\n' +
+                '+1 Food';
+        },
+        effect: function(){if(!isHostile('deccan'))G.food=Math.min(5,G.food+1);},
+        choices: [{text:'🕌 To Hyderabad', next:450}]
+    },
+    402: {
+        text: '❌ PRIDE HURTS\n\n' +
+            'Guard hits you.\n\n' +
+            'HP -1',
+        choices: [{text:'🕌 To Hyderabad', next:450}]
+    },
+    403: {
+        text: '💰 BRIBE ACCEPTED\n\n' +
+            '"Pass. Tell no one."',
+        choices: [{text:'🕌 To Hyderabad', next:450}]
+    },
+    450: {
+        image: 'deccan',
+        imageCaption: 'Hyderabad Bazaar',
+        text: 'HYDERABAD BAZAAR - Day ' + G.day + '\n\n' +
+            'Opulent markets. Palace on hill.\n' +
+            'Wealth inequality stark.\n\n' +
+            'Servants everywhere. Nobles in carriages.',
+        choices: [
+            {text:'❓ Seek family [Speech]', next:451, skillCheck:{skill:'speech',difficulty:50}, onSuccess:function(){if(G.clues>=2)G.clues=3;addXP(2);}, onFail:function(){}},
+            {text:'🚶 Continue Journey', next:500}
+        ]
+    },
+    451: {
+        text: function() { 
+            return G.clues >= 3 ? 
+                '✅ FAMILY FOUND!\n   Father is palace servant!\n   CLUES: 3/3' : 
+                '❌ NO TRACE\n   Thousands of servants.'; 
+        },
+        choices: [{text:'🚶 Continue', next:500}]
+    },
+    500: {
+        image: 'crossroads',
+        text: function() {
+            var daysLeft = 60 - G.day;
+            if(G.clues >= 3 && daysLeft > 5) {
+                return '🏠 REUNION - Day ' + G.day + '\n\n' +
+                    'You follow the last clue.\n' +
+                    'A house. Smoke from chimney.\n' +
+                    'Voices inside. Familiar voices...\n\n' +
+                    'You push the door open...';
+            } else if(G.clues >= 1) {
+                return '🏚️ PARTIAL - Day ' + G.day + '\n\n' +
+                    'You find some of them. Not all.\n\n' +
+                    'Your family member is here.\n' +
+                    'Others... gone. Maybe dead. Maybe lost.\n\n' +
+                    'War takes. Sometimes it gives back.';
+            } else if(daysLeft <= 0) {
+                return '⏰ TOO LATE - Day 60\n\n' +
+                    'Sixty days passed.\n' +
+                    'Trails cold. Family moved on.\n\n' +
+                    'You stand at empty house.\n' +
+                    'Wind through broken windows.';
+            }
+            return '❓ ALONE - Day ' + G.day + '\n\n' +
+                'No trace. No word. Nothing.\n\n' +
+                'You searched everywhere.\n' +
+                'Found nothing.\n\n' +
+                'What now?';
+        },
+        choices: function() {
+            var daysLeft = 60 - G.day;
+            if(G.clues >= 3 && daysLeft > 5) return [{text:'🏆 BEST ENDING', next:700}];
+            if(G.clues >= 1) return [{text:'📖 GOOD ENDING', next:701}];
+            if(daysLeft <= 0) return [{text:'⚰️ BAD ENDING', next:702}];
+            return [{text:'🚶 WANDERER', next:703}];
+        }
+    },
+    700: {
+        image: 'reunion',
+        imageCaption: 'Family Reunited',
+        text: function() {
+            return '🏆 ***** FAMILY REUNITED ***** 🏆\n\n' +
+                'They embrace. Tears. Laughter. Stories.\n\n' +
+                'You find a home. In the fractured land,\n' +
+                'a small peace.\n\n' +
+                'The war continues. But not for you.\n\n' +
+                '=== FINAL STATS ===\n' +
+                '⭐ Level: ' + G.level + '\n' +
+                '⏳ Days: ' + G.day + '/60\n' +
+                '💀 Kills: ' + G.kills + '\n' +
+                '❤️ Helped: ' + G.helped + '\n\n' +
+                '=== SKILLS ===\n' +
+                '⚔️ Combat: ' + G.skills.combat + '\n' +
+                '🌾 Survival: ' + G.skills.survival + '\n' +
+                '🗣️ Speech: ' + G.skills.speech + '\n' +
+                '🥷 Stealth: ' + G.skills.stealth + '\n' +
+                '🏥 Medicine: ' + G.skills.medicine + '\n' +
+                '💰 Trade: ' + G.skills.trade + '\n\n' +
+                '★★★★★ BEST ENDING ★★★★★';
+        },
+        choices: [{text:'🔄 PLAY AGAIN', next:1, effect:init}]
+    },
+    701: { 
+        image: 'reunion',
+        text: '📖 **** PARTIAL REUNION ****\n\n' +
+            'Some came home. Others didn\'t.\n\n' +
+            'You rebuild. Slowly.\n' +
+            'With those who remain.\n\n' +
+            'The missing are remembered.\n' +
+            'The found are cherished.\n\n' +
+            '★★★★☆ GOOD ENDING',
+        choices: [{text:'🔄 PLAY AGAIN', next:1, effect:init}] 
+    },
+    702: { 
+        image: 'gameover',
+        imageCaption: 'Too Late',
+        text: '⚰️ ** TOO LATE **\n\n' +
+            '60 days passed.\n' +
+            'The trail went cold.\n\n' +
+            'Maybe they\'re alive. Maybe not.\n' +
+            'You\'ll never know.\n\n' +
+            'You walk away. Haunted.\n\n' +
+            '★★☆☆☆ BAD ENDING',
+        choices: [{text:'🔄 PLAY AGAIN', next:1, effect:init}] 
+    },
+    703: { 
+        text: '🚶 *** WANDERER ***\n\n' +
+            'You walk. No destination.\n' +
+            'No family. No faction.\n\n' +
+            'India is broken. You are free.\n\n' +
+            'Some say you became a myth.\n' +
+            'The Ghost of the Grand Trunk Road.\n\n' +
+            '★★★☆☆ NEUTRAL ENDING',
+        choices: [{text:'🔄 PLAY AGAIN', next:1, effect:init}] 
+    },
+    900: { 
+        text: '🏠 *** SETTLED ***\n\n' +
+            'You chose safety over search.\n' +
+            'Stability over hope.\n\n' +
+            'Years pass. You never forget.\n' +
+            'But you live.\n\n' +
+            'In 1963, that was enough.\n\n' +
+            '★★★☆☆ NEUTRAL ENDING',
+        choices: [{text:'🔄 PLAY AGAIN', next:1, effect:init}] 
+    },
+    999: {
+        image: 'gameover',
+        imageCaption: 'Your Journey Ends',
+        text: function() {
+            return '💀 ***** GAME OVER ***** 💀\n\n' +
+                'Your journey ends here.\n\n' +
+                'Another refugee. Another story\n' +
+                'cut short.\n\n' +
+                'In 1963, millions disappeared.\n' +
+                'You are one of them.\n\n' +
+                '=== FINAL STATS ===\n' +
+                '⏳ Days survived: ' + G.day + '\n' +
+                '⭐ Level: ' + G.level + '\n' +
+                '🔍 Clues: ' + G.clues + '/3\n' +
+                '💀 Kills: ' + G.kills + '\n' +
+                '❤️ Helped: ' + G.helped + '\n\n' +
+                'Rest in Power.';
+        },
+        choices: [{text:'🔄 TRY AGAIN', next:1, effect:init}]
+    }
+};
+
+init();
+render(1);
+    </script>
+</body>
+</html>
