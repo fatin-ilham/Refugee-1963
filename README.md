@@ -12,7 +12,7 @@ Find your family in 60 days.
 
 ## Play Now
 
-**[Play the Game](https://fatin-ilham.github.io/Refugee-1963/)**
+**[Play the Game](https://refugee-1963.netlify.app/)**
 
 Hosted on Netlify. Open in any modern browser.
 
