@@ -12,9 +12,9 @@ Find your family in 60 days.
 
 ## Play Now
 
-**[Play the Game](game-with-images.html)**
+**[Play the Game](https://fatin-ilham.github.io/Refugee-1963/)**
 
-Open `game-with-images.html` in your browser, or host on GitHub Pages.
+Hosted on Netlify. Open in any modern browser.
 
 ## Features
 
@@ -23,6 +23,7 @@ Open `game-with-images.html` in your browser, or host on GitHub Pages.
 - **6 Factions**: Lion Guardians, Dravida Alliance, People's Front, Deccan Coalition, Union Remnant, Free Ports
 - **Reputation System**: Your choices affect faction relationships
 - **Multiple Endings**: 6+ different endings based on your journey
+- **Visual Assets**: Custom artwork for factions, locations, and UI elements
 
 ## How to Play
 
@@ -44,37 +45,49 @@ Open `game-with-images.html` in your browser, or host on GitHub Pages.
 
 | File | Description |
 |------|-------------|
-| `game-with-images.html` | Main game (with images) |
-| `skills.html` | Skills demo |
-| `reputation.html` | Reputation demo |
-| `game-logic.js` | PDF game logic (for Adobe Acrobat version) |
+| `index.html` | Main game with images |
+| `*.png` | Game assets (factions, locations, UI, scenes) |
 
 ## Running Locally
 
 ### Option 1: Direct Open
-Just open `game-with-images.html` in Firefox (Chrome blocks local images)
+Open `index.html` in Firefox (Chrome may block local images)
 
 ### Option 2: Python Server
 ```bash
-cd refugee-1963
+cd Refugee-1963
 python -m http.server 8000
 ```
-Then open `http://localhost:8000/game-with-images.html`
+Then open `http://localhost:8000/`
 
 ### Option 3: VS Code Live Server
-Install Live Server extension, right-click HTML file, "Open with Live Server"
+Install Live Server extension, right-click `index.html`, "Open with Live Server"
 
-## GitHub Pages
+## Hosting
 
+### Netlify
+Drag & drop folder or connect GitHub repo. Auto-deploys on push.
+
+### GitHub Pages
 1. Go to Settings → Pages
 2. Source: Deploy from branch → main → / (root)
-3. Your site will be live at `https://yourusername.github.io/repo-name/`
+3. Site live at `https://yourusername.github.io/Refugee-1963/`
 
 ## Tech Stack
 
 - Pure HTML/CSS/JavaScript (no frameworks)
 - Works offline
 - Responsive design
+- Open Graph & Twitter Card meta tags for link previews
+
+## Credits
+
+**Created by Fatin Ilham**
+
+- GitHub: [@fatin-ilham](https://github.com/fatin-ilham)
+- Facebook: [spiritofhonestyy](https://www.facebook.com/spiritofhonestyy/)
+- Instagram: [spiritofhonestyyy](https://www.instagram.com/spiritofhonestyyy/)
+- LinkedIn: [fatin-ilham](https://www.linkedin.com/in/fatin-ilham-67b806331/)
 
 ## License
 
